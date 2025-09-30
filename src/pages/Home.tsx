@@ -1,47 +1,13 @@
 import { useState } from "react"
 import ResumeForm from "../components/ResumeForm"
 import TemplateSelector from "../components/TemplateSelector"
-import Template1 from "../templates/Template1"
-import Template2 from "../templates/Template2"
+import { Template1, Template2, Template3 } from "../templates/BrowserTemplates"
+import { PDFTemplate1, PDFTemplate2, PDFTemplate3 } from "../templates/PDFTemplates"
 import { generatePDF } from "../utils/pdfUtils"
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
 
-// PDF Templates
-const PDFTemplate1 = ({ data }: { data: any }) => (
-  <Document>
-    <Page style={{ padding: 20, fontFamily: "Helvetica" }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold" }}>{data.name}</Text>
-      <Text>{data.email} | {data.phone}</Text>
 
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>Education</Text>
-      <Text>{data.education}</Text>
 
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>Experience</Text>
-      <Text>{data.experience}</Text>
 
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>Skills</Text>
-      <Text>{data.skills}</Text>
-    </Page>
-  </Document>
-)
-
-const PDFTemplate2 = ({ data }: { data: any }) => (
-  <Document>
-    <Page style={{ padding: 20, fontFamily: "Times-Roman" }}>
-      <Text style={{ fontSize: 28, color: "#1E40AF", fontWeight: "bold" }}>{data.name}</Text>
-      <Text style={{ fontStyle: "italic" }}>{data.email} | {data.phone}</Text>
-
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>🎓 Education</Text>
-      <Text>{data.education}</Text>
-
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>💼 Experience</Text>
-      <Text>{data.experience}</Text>
-
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>🛠 Skills</Text>
-      <Text>{data.skills}</Text>
-    </Page>
-  </Document>
-)
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -57,9 +23,11 @@ export default function Home() {
 
   const handleDownload = async () => {
     if (template === "template1") {
-      await generatePDF(<PDFTemplate1 data={formData} />)
-    } else {
-      await generatePDF(<PDFTemplate2 data={formData} />)
+      await generatePDF(<PDFTemplate1 data={formData} />);
+    } else if (template === "template2") {
+      await generatePDF(<PDFTemplate2 data={formData} />);
+    } else if (template === "template3") {
+      await generatePDF(<PDFTemplate3 data={formData} />);
     }
   }
 
@@ -80,9 +48,11 @@ export default function Home() {
           <div className="border p-4 bg-white rounded-lg shadow mt-4 h-[500px] overflow-auto">
             {template === "template1" ? (
               <Template1 data={formData} />
-            ) : (
+            ) : template === "template2" ? (
               <Template2 data={formData} />
-            )}
+            ) : template === "template3" ? (
+              <Template3 data={formData} />
+            ) : null}
           </div>
 
           <button
